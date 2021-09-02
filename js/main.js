@@ -97,11 +97,13 @@ const icons = [
     },
   ];
 
-
+  const colors = ['blue', 'orange', 'purple'];
 
 //arrow FUNCTION---------------
+
+// funzione che stampa tutti gli oggetti dell'array con le relative proprietà
 const print = (array, container) => {
-    container.innerHTML = ''; //pulisce ogni volta il codice html della sezione presa prima
+    container.innerHTML = ''; //pulisce ogni volta il codice html della sezione id icons
     array.forEach((element) => {
         const {name, family, prefix, color} = element;
         container.innerHTML += `
@@ -113,22 +115,69 @@ const print = (array, container) => {
     });
 };
 
-const colors = ['blue', 'orange', 'purple'];
+// funzione che aggiunge agli oggetti la proprietà colore con il valore assegnato 
+const colorIcons = (array, colors) => {
+    const types = getTypes(array);
+    // console.log(types);
+    const coloredArray = array.map((element) => {
+        const indexType = types.indexOf(element.type);
+        // console.log(indexType);
+        
+        element.color = colors[indexType];
+        return element;
+    });
+    return (coloredArray);
+};
 
+// funzione che crea un array con chiave type da utilizzare per assegnare un colore alle varie tipologie animale user vegetale
+const getTypes = (array) => {
+    const types = [];
+
+    array.forEach((element) => {
+        console.log(element.type)
+        if (!types.includes(element.type)) {
+            types.push(element.type);
+        }
+    });
+    return types;
+};
+
+// funzione che inserisce stampa le opzioni nel select 
+const printOptions = (array, select) => {
+    array.forEach((element) => {
+        select.innerHTML += `<option value="${element}">${element}</option>`;
+    });
+};
+
+// funzione che filtra gli oggetti da visualizzare in base all'opzione scelta dall'utente
+const filterValues = (array, type) => {
+    const filteredIcons = array.filter((element) => {
+        if (element.type === type) {
+            return true;
+        }
+        return false;
+    });
+    if (type === "") {
+        return array;
+    }
+    return filteredIcons;
+};
+
+// /arrow FUNCTION---------------
 
 //prendo l'elemento con id icons
 const iconsContainer = document.getElementById('icons');
 
 const coloredArray = colorIcons(icons, colors);
 print(icons, iconsContainer);
-
+// console.log(coloredArray);
 const types = getTypes(coloredArray);
 const select = document.getElementById('type');
 printOptions(types, select);
 
 
 //al change mostrare solo le icone filtrate
-select.onchange = function(element) {
+select.onchange = (element) => {
     const filtred = filterValues(icons, element.target.value);
 
     print(filtred, iconsContainer);
@@ -149,45 +198,46 @@ select.onchange = function(element) {
 //     });
 // }
 
-function colorIcons(array, colors) {
-    const types = getTypes(array);
-    // console.log(types);
-    const coloredArray = array.map((element) => {
-        const indexType = types.indexOf(element.type);
-        // console.log(indexType);
+// function colorIcons(array, colors) {
+//     const types = getTypes(array);
+//     // console.log(types);
+//     const coloredArray = array.map((element) => {
+//         const indexType = types.indexOf(element.type);
+//         // console.log(indexType);
         
-        element.color = colors[indexType];
-        return element;
-    });
-    console.log(coloredArray);
-}
+//         element.color = colors[indexType];
+//         return element;
+//     });
+//     return (coloredArray);
+// }
 
-function getTypes(array) {
-    const types = [];
+// function getTypes(array) {
+//     const types = [];
 
-    array.forEach((element) => {
-        if (!types.includes(element.type)) {
-            types.push(element.type);
-        }
-    });
-    return types;
-} 
+//     array.forEach((element) => {
+//         console.log(element.type)
+//         if (!types.includes(element.type)) {
+//             types.push(element.type);
+//         }
+//     });
+//     return types;
+// } 
 
-function printOptions(array, select) {
-    array.forEach((element) => {
-        select.innerHTML += `<option value="${element}">${element}</option>`;
-    });
-}
+// function printOptions(array, select) {
+//     array.forEach((element) => {
+//         select.innerHTML += `<option value="${element}">${element}</option>`;
+//     });
+// }
 
-function filterValues(array, type) {
-    const filteredIcons = array.filter((element) => {
-        if (element.type === type) {
-            return true;
-        }
-        return false;
-    });
-    if (type === "") {
-        return array;
-    }
-    return filteredIcons;
-}
+// function filterValues(array, type) {
+//     const filteredIcons = array.filter((element) => {
+//         if (element.type === type) {
+//             return true;
+//         }
+//         return false;
+//     });
+//     if (type === "") {
+//         return array;
+//     }
+//     return filteredIcons;
+// }
